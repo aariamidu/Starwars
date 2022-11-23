@@ -18,7 +18,9 @@ def random_person():
 def run():
     print('Hello stranger, Welcome to StarWars Top Trump!')
     player_name = input('What is your name?')
-    my_person = random_person()
+    lives_remaining = 3
+    while lives_remaining > 0:
+        my_person = random_person()
     print(player_name, ',you were given {}'.format(my_person['name']))
     stat_choice = input('Which stat do you want to use? ( height, mass, birth_year)')
     opponent_person = random_person()
@@ -39,10 +41,12 @@ def run():
     print('The opponent chose {}'.format(opponent_person['name']))
     if my_stat > opponent_stat:
         print(player_name, ',You Win! 🙌🏽')
-    elif my_stat < opponent_stat:
-        print(player_name, ',You Lose! 🥺Try Again')
-    else:
+    elif my_stat == opponent_stat:
         print('Its A Draw!')
+    elif my_stat < opponent_stat:
+        lives_remaining -= 1
+        print(player_name, 'You have', lives_remaining, 'lives remaining!')
+
 
     my_person = random_person()
     print(player_name, ',you were given {}'.format(my_person['name']))
