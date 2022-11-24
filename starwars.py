@@ -48,8 +48,8 @@ def run():
             print('Your score is', score)
         elif my_stat < opponent_stat:
             lives_remaining = lives_remaining - 1
-            print(player_name,  'You have', lives_remaining, 'lives remaining!')
+            print(player_name,  'You have,', lives_remaining, 'lives remaining!')
             print('Your score is', score)
 
-
 run()
+
