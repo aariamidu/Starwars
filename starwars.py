@@ -1,5 +1,7 @@
 import random
 import requests
+import csv
+import pandas
 
 
 def random_person():
@@ -19,7 +21,7 @@ def run():
 
     print('Hello stranger, Welcome to StarWars Top Trump!')
     player_name = input('What is your name?')
-    lives_remaining = 3
+    lives_remaining = 1
     score = 0
     while lives_remaining > 0:
         my_person = random_person()
@@ -51,5 +53,21 @@ def run():
             print(player_name,  'You have,', lives_remaining, 'lives remaining!')
             print('Your score is', score)
 
-run()
+            field_names = ['player_name', 'score']
+
+            data = [{"player_name": player_name, 'score': score}]
+            with open("score.csv", "a") as csv_file:
+                spreadsheet = csv.DictWriter(csv_file, fieldnames=field_names)
+                spreadsheet.writerows(data)
+            with open('score.csv', 'r') as csv_file:
+                spreadsheet = csv.DictReader(csv_file)
+                for row in spreadsheet:
+                    print(dict(row))
+
+
+                    max_score = max(score, key=sum)
+
+                    print(f"Player #{player_name} is the winner, with {sum(max_score)} points!")
+
+
 
