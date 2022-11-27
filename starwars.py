@@ -1,7 +1,7 @@
 import random
 import requests
 import csv
-import pandas
+
 
 
 def random_person():
@@ -18,7 +18,23 @@ def random_person():
 
 
 def run():
+    highest_score = 0
+    with open('score.csv', 'r') as csv_file:
 
+        spreadsheet = csv.DictReader(csv_file)
+        for row in spreadsheet:
+
+            intscore = int(row['score'])
+
+            if intscore > highest_score:
+                highest_score = intscore
+
+    print('The highest score to beat is',highest_score)
+    game = input('Do you think you can beat it? y/n')
+    if game == 'y':
+        print('Good Luck🙌🏽')
+    else:
+        print('You got this🙌🏽')
     print('Hello stranger, Welcome to StarWars Top Trump!')
     player_name = input('What is your name?')
     lives_remaining = 1
@@ -53,21 +69,22 @@ def run():
             print(player_name,  'You have,', lives_remaining, 'lives remaining!')
             print('Your score is', score)
 
+
             field_names = ['player_name', 'score']
 
             data = [{"player_name": player_name, 'score': score}]
-            with open("score.csv", "a") as csv_file:
+            field_names = ['player_name', 'score']
+
+            data = [{"player_name": player_name, 'score': score}]
+
+            with open("score.csv", "w") as csv_file:
                 spreadsheet = csv.DictWriter(csv_file, fieldnames=field_names)
-                spreadsheet.writerows(data)
-            with open('score.csv', 'r') as csv_file:
-                spreadsheet = csv.DictReader(csv_file)
-                for row in spreadsheet:
-                    print(dict(row))
+                spreadsheet.writeheader()
 
+            for i in range(1):
+                with open("score.csv", "a") as csv_file:
+                    spreadsheet = csv.DictWriter(csv_file, fieldnames=field_names)
+                    spreadsheet.writerows(data)
 
-                    max_score = max(score, key=sum)
-
-                    print(f"Player #{player_name} is the winner, with {sum(max_score)} points!")
-
-
+run()
 
