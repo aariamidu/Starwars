@@ -2,6 +2,18 @@ import random
 import requests
 import csv
 
+def readscores(filename):
+    scores = {}
+    with open(filename, 'r') as csv_file:
+        for row in csv.DictReader(csv_file):
+            scores[row['player_name']] = int(row['score'])
+    return scores
+
+def writescores(scores, filename):
+    with open(filename, 'w') as csv_file:
+        writer = csv.writer(csv_file)
+        writer.writerow(['player_name','score'])
+        writer.writerows( scores.items() )
 
 
 def random_person():
@@ -18,26 +30,13 @@ def random_person():
 
 
 def run():
-    highest_score = 0
-    with open('score.csv', 'r') as csv_file:
+    score = readscores('score.csv')
+    highest_score = max(score.values())
+    print('The highest score to beat is', highest_score)
 
-        spreadsheet = csv.DictReader(csv_file)
-        for row in spreadsheet:
-
-            intscore = int(row['score'])
-
-            if intscore > highest_score:
-                highest_score = intscore
-
-    print('The highest score to beat is',highest_score)
-    game = input('Do you think you can beat it? y/n')
-    if game == 'y':
-        print('Good Luck🙌🏽')
-    else:
-        print('You got this🙌🏽')
     print('Hello stranger, Welcome to StarWars Top Trump!')
     player_name = input('What is your name?')
-    lives_remaining = 1
+    lives_remaining = 3
     score = 0
     while lives_remaining > 0:
         my_person = random_person()
@@ -56,35 +55,26 @@ def run():
         opponent_stat = opponent_person[stat_choice]
 
         if my_stat > opponent_stat:
-            print(player_name, 'You Win! 🙌🏽')
+            print(player_name, 'You Win!')
             score = score + 1
-            print(player_name, 'You have ', lives_remaining, 'lives remaining!')
-            print('Your score is', score)
         elif my_stat == opponent_stat:
             print('Its A Draw!')
-            print(player_name, 'You have', lives_remaining, 'lives remaining!')
-            print('Your score is', score)
         elif my_stat < opponent_stat:
             lives_remaining = lives_remaining - 1
-            print(player_name,  'You have,', lives_remaining, 'lives remaining!')
-            print('Your score is', score)
+
+        print(player_name,  'You have,', lives_remaining, 'lives remaining!')
+        print('Your score is', score)
 
 
-            field_names = ['player_name', 'score']
+    field_names = ['player_name', 'score']
 
-            data = [{"player_name": player_name, 'score': score}]
-            field_names = ['player_name', 'score']
-
-            data = [{"player_name": player_name, 'score': score}]
-
-            with open("score.csv", "w") as csv_file:
-                spreadsheet = csv.DictWriter(csv_file, fieldnames=field_names)
-                spreadsheet.writeheader()
-
-            for i in range(1):
-                with open("score.csv", "a") as csv_file:
-                    spreadsheet = csv.DictWriter(csv_file, fieldnames=field_names)
-                    spreadsheet.writerows(data)
+    data = [{"player_name": player_name, 'score': score}]
+    with open("score.csv", "a") as csv_file:
+        spreadsheet = csv.DictWriter(csv_file, fieldnames=field_names)
+        spreadsheet.writerows(data)
+    with open('score.csv', 'r') as csv_file:
+        spreadsheet = csv.DictReader(csv_file)
+        for row in spreadsheet:
+            print(dict(row))
 
 run()
-
