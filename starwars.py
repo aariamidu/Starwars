@@ -2,6 +2,7 @@ import random
 import requests
 import csv
 
+
 def readscores(filename):
     scores = {}
     with open(filename, 'r') as csv_file:
@@ -9,11 +10,12 @@ def readscores(filename):
             scores[row['player_name']] = int(row['score'])
     return scores
 
+
 def writescores(scores, filename):
     with open(filename, 'w') as csv_file:
         writer = csv.writer(csv_file)
-        writer.writerow(['player_name','score'])
-        writer.writerows( scores.items() )
+        writer.writerow(['player_name', 'score'])
+        writer.writerows(scores.items())
 
 
 def random_person():
@@ -30,12 +32,18 @@ def random_person():
 
 
 def run():
-    score = readscores('score.csv')
-    highest_score = max(score.values())
-    print('The highest score to beat is', highest_score)
+    scores = readscores('score.csv')
+    highest_score = max(scores.values())
 
     print('Hello stranger, Welcome to StarWars Top Trump!')
+
     player_name = input('What is your name?')
+    print('The highest score to beat is', highest_score)
+    game = input("Do you think you can beat this? y/n")
+    if game == "y":
+        print("Good luck!!")
+    else:
+        print("You've got this")
     lives_remaining = 3
     score = 0
     while lives_remaining > 0:
@@ -65,16 +73,13 @@ def run():
         print(player_name,  'You have,', lives_remaining, 'lives remaining!')
         print('Your score is', score)
 
+        scores[player_name] = score
+        writescores(scores, 'score.csv')
 
-    field_names = ['player_name', 'score']
+        print('SCORE: ', score)
+        if score > highest_score:
+            highest_score = score
+            print(highest_score)
 
-    data = [{"player_name": player_name, 'score': score}]
-    with open("score.csv", "a") as csv_file:
-        spreadsheet = csv.DictWriter(csv_file, fieldnames=field_names)
-        spreadsheet.writerows(data)
-    with open('score.csv', 'r') as csv_file:
-        spreadsheet = csv.DictReader(csv_file)
-        for row in spreadsheet:
-            print(dict(row))
 
 run()
